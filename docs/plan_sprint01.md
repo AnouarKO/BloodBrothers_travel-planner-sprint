@@ -22,8 +22,8 @@ Construir el esqueleto inicial de la aplicación Travel Planner incluyendo:
 | T1.4 | Configurar Kotlin | Anouar | 0.5 | Media |
 | T1.5 | Crear proyecto inicial | Anouar | 1 | Alta |
 | T2.1 | Crear repositorio GitHub | Anouar | 0.5 | Alta |
-| T2.3 | Añadir LICENSE | Anouar | 0.25 | Media |
-| T2.4 | Crear CONTRIBUTING | Anouar | 0.5 | Media |
+| T2.3 | Añadir LICENSE | Eloi | 0.25 | Media |
+| T2.4 | Crear CONTRIBUTING | Eloi y Anouar | 0.5 | Media |
 | T2.5 | Crear README | Eloi y Anouar | 0.75 | Alta |
 | T2.6 | Crear estructura /docs | Eloi | 0.5 | Alta |
 | T2.7 | Crear design.md | Eloi y Anouar | 1.5 | Media |
