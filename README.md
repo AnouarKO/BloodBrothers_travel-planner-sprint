@@ -44,6 +44,8 @@ BBTraveling/
 |- docs/
 |  |- app-flow.mmd
 |  |- app-uml.mmd
+|  |- diagrams/
+|  |  \- app-uml.jpg
 |  |- domain-model.mmd
 |  |- design.md
 |  |- color-palette.md
@@ -53,6 +55,15 @@ BBTraveling/
 |- CONTRIBUTING.md
 \- LICENSE
 ```
+
+## Diagrama UML de la app
+
+El diagrama UML principal se mantiene en formato editable y en formato visual:
+
+- Editable (Mermaid): `docs/app-uml.mmd`
+- Visual (para README/release): `docs/diagrams/app-uml.jpg`
+
+![Diagrama UML de BBTraveling](docs/diagrams/app-uml.jpg)
 
 ## Equipo
 
