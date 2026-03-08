@@ -79,5 +79,3 @@ Validacion tecnica:
 ## 5. Update post-release (`2026-03-08`)
 
 - Se anade version visual del diagrama UML en `docs/diagrams/app-uml.jpg`.
-- Se actualiza `README.md` con seccion dedicada al diagrama y preview inline.
-- Esta actualizacion se recomienda publicar como `v1.0.1` (documentacion).
