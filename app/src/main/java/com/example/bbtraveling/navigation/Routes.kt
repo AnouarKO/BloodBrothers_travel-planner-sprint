@@ -11,6 +11,7 @@ object Routes {
     const val Preferences = "preferences"
     const val About = "about"
     const val Terms = "terms"
+    const val TermsOnboarding = "termsOnboarding"
 
     const val ARG_TRIP_ID = "tripId"
     const val TripDetail = "tripDetail/{$ARG_TRIP_ID}"

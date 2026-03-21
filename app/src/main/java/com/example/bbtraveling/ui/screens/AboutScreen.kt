@@ -30,8 +30,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.bbtraveling.R
+import com.example.bbtraveling.ui.preview.PreviewScreenContainer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,13 +48,13 @@ fun AboutScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("About") },
+                title = { Text(stringResource(R.string.title_about)) },
                 navigationIcon = {
                     if (onBack != null) {
                         IconButton(onClick = onBack) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                                contentDescription = "Back"
+                                contentDescription = stringResource(R.string.cd_back)
                             )
                         }
                     }
@@ -84,13 +87,13 @@ fun AboutScreen(
                         )
                         Spacer(Modifier.height(12.dp))
                         Text(
-                            text = "BBTraveling",
+                            text = stringResource(R.string.app_name),
                             style = MaterialTheme.typography.headlineMedium,
                             color = Color.White
                         )
                         Spacer(Modifier.height(6.dp))
                         Text(
-                            text = "A branded travel planner mockup for Sprint 01.",
+                            text = stringResource(R.string.about_banner_subtitle),
                             color = Color.White.copy(alpha = 0.92f)
                         )
                     }
@@ -99,29 +102,29 @@ fun AboutScreen(
 
             item {
                 InfoCard(
-                    title = "Team",
-                    body = "Anouar El Kabiri and Eloi Mora Palomino BBTraveling project"
+                    title = stringResource(R.string.about_team_title),
+                    body = stringResource(R.string.about_team_body)
                 )
             }
 
             item {
                 InfoCard(
-                    title = "Technical stack",
-                    body = "Kotlin, Jetpack Compose, Material 3 and Navigation Compose"
+                    title = stringResource(R.string.about_stack_title),
+                    body = stringResource(R.string.about_stack_body)
                 )
             }
 
             item {
                 InfoCard(
-                    title = "Version",
-                    body = "Version 1.0.0 | namespace com.example.bbtraveling"
+                    title = stringResource(R.string.about_version_title),
+                    body = stringResource(R.string.about_version_body)
                 )
             }
 
             item {
                 InfoCard(
-                    title = "License",
-                    body = "Academic mock project for classroom delivery"
+                    title = stringResource(R.string.about_license_title),
+                    body = stringResource(R.string.about_license_body)
                 )
             }
 
@@ -129,7 +132,7 @@ fun AboutScreen(
                 Button(onClick = onOpenTerms, modifier = Modifier.fillMaxWidth()) {
                     Icon(Icons.Rounded.Gavel, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Open Terms & Conditions")
+                    Text(stringResource(R.string.action_open_terms))
                 }
             }
         }
@@ -147,5 +150,16 @@ private fun InfoCard(title: String, body: String) {
             Spacer(Modifier.height(6.dp))
             Text(body, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun AboutScreenPreview() {
+    PreviewScreenContainer {
+        AboutScreen(
+            onBack = {},
+            onOpenTerms = {}
+        )
     }
 }

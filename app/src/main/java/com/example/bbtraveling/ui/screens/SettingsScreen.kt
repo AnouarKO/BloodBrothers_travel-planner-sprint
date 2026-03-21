@@ -26,8 +26,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.example.bbtraveling.R
+import com.example.bbtraveling.ui.preview.PreviewScreenContainer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,7 +41,7 @@ fun SettingsScreen(
     onOpenTerms: () -> Unit
 ) {
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Settings") }) }
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.title_settings)) }) }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -50,32 +54,32 @@ fun SettingsScreen(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("App settings", style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.settings_section_title), style = MaterialTheme.typography.titleMedium)
                     Spacer(Modifier.height(6.dp))
                     Text(
-                        text = "Manage preferences, app info and legal terms from this section.",
+                        text = stringResource(R.string.settings_section_body),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
 
             SettingActionCard(
-                title = "Preferences",
-                subtitle = "Language, theme and notifications (mock UI)",
+                title = stringResource(R.string.settings_preferences),
+                subtitle = stringResource(R.string.settings_preferences_subtitle),
                 icon = Icons.Rounded.Settings,
                 onClick = onOpenPreferences
             )
 
             SettingActionCard(
-                title = "About",
-                subtitle = "Team, version and technical stack",
+                title = stringResource(R.string.settings_about),
+                subtitle = stringResource(R.string.settings_about_subtitle),
                 icon = Icons.Rounded.Info,
                 onClick = onOpenAbout
             )
 
             SettingActionCard(
-                title = "Terms & Conditions",
-                subtitle = "Read and review the legal mock text",
+                title = stringResource(R.string.settings_terms),
+                subtitle = stringResource(R.string.settings_terms_subtitle),
                 icon = Icons.Rounded.Gavel,
                 onClick = onOpenTerms
             )
@@ -120,5 +124,17 @@ private fun SettingActionCard(
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun SettingsScreenPreview() {
+    PreviewScreenContainer {
+        SettingsScreen(
+            onOpenPreferences = {},
+            onOpenAbout = {},
+            onOpenTerms = {}
+        )
     }
 }

@@ -1,80 +1,132 @@
-# BBTraveling - Sprint 01
+# BBTraveling
 
-Bienvenido a **BBTraveling**, una app Android de planificación de viajes creada para el Sprint 01 de la asignatura **Applications for Mobile Devices**.
+Proyecto Android de planificacion de viajes para la asignatura **Applications for Mobile Devices**.
 
-El proyecto entrega una experiencia **mock completa**: navegación funcional, modelo de dominio, datos realistas hardcoded y diseño visual coherente con identidad morado/amarillo.
+`BBTraveling` se desarrollo en dos sprints:
+- `Sprint 01`: estructura visual, navegacion y pantallas base.
+- `Sprint 02`: logica funcional, validaciones, persistencia de ajustes, testing y documentacion.
 
-## Sobre el proyecto
+## Estado del proyecto
 
-BBTraveling nace para simplificar la organización de viajes de forma visual, clara y escalable.
+La version actual implementa los requisitos funcionales del `LAB_SPRINT02`:
+- arquitectura `UI -> ViewModel -> Repository -> DataSource`
+- CRUD inMemory de viajes
+- CRUD inMemory de actividades del itinerario
+- validaciones en UI, ViewModel y Repository
+- ajustes persistidos con `SharedPreferences`
+- multi-language funcional (`en`, `es`, `ca`)
+- Terms & Conditions en primer arranque
+- presupuesto de viaje y costes de actividades en euros
+- logs visibles en Logcat
+- tests unitarios de dominio y repositorio
 
-En este sprint no hay backend ni persistencia: el objetivo es validar estructura, navegación y presentación de la aplicación.
+## Arquitectura
 
-## Funcionalidades implementadas (Sprint 01)
+La app sigue una estructura MVVM sencilla:
 
-- Splash con logo, nombre de app, barra de carga y versión
-- Home/Dashboard con “Next Trip” y métricas
-- Trips con filtros y listado de viajes mock
-- Trip Detail con tabs `Overview` / `Itinerary`
-- Gallery global y por viaje (UI mock de añadir/eliminar)
-- Settings + Preferences (idioma, tema y notificaciones en modo mock)
-- About y Terms & Conditions
-- Navegación completa con `NavController` (root + bottom navigation)
+```text
+UI (Screens)
+  -> ViewModel
+  -> Repository
+  -> DataSource
+```
 
-## Tecnologías usadas
+Piezas principales:
+- `TripsViewModel`: coordina CRUD, validaciones previas y logs de viajes/itinerario.
+- `SettingsViewModel`: gestiona preferencias persistidas y logs de ajustes.
+- `TripRepositoryImpl`: concentra la logica de negocio de viajes y actividades.
+- `FakeTripDataSource`: mantiene el estado en memoria.
+- `SharedPreferencesSettingsRepository`: persiste idioma, tema, usuario y terminos aceptados.
 
-- Kotlin
-- Jetpack Compose (Material 3)
-- Navigation Compose
-- Gradle (Kotlin DSL)
-- Android Studio
+## Funcionalidad implementada
+
+### Viajes
+- crear, editar y eliminar viajes
+- titulo, descripcion, ciudad, pais, fechas, estado y presupuesto
+- estado sugerido automaticamente segun fechas
+- reprogramacion del viaje con opcion de mover tambien el itinerario
+
+### Itinerario
+- crear, editar y eliminar actividades
+- fecha y hora mediante pickers
+- categorias y plantillas predefinidas
+- coste por actividad en euros
+
+### Validaciones
+- campos obligatorios
+- fechas futuras
+- fecha de inicio anterior a fecha final
+- actividades dentro del rango del viaje
+- presupuesto y coste no negativos
+- mensajes de error claros en pantalla
+
+### Ajustes
+- `username`
+- `dateOfBirth`
+- `darkMode`
+- `languageTag`
+- `termsAccepted`
+
+## Logs
+
+Los logs solicitados por el sprint se pueden ver en Logcat con estos tags:
+- `TripsViewModel`
+- `SettingsViewModel`
+
+Criterio aplicado:
+- `Log.i` para operaciones correctas
+- `Log.w` para validaciones rechazadas o reglas de negocio esperadas
+- `Log.e` solo para fallos sin detalle o situaciones realmente anormales
+
+## Idiomas
+
+Los textos se gestionan con recursos Android separados:
+- `app/src/main/res/values/strings.xml`
+- `app/src/main/res/values-es/strings.xml`
+- `app/src/main/res/values-ca/strings.xml`
+
+El cambio de idioma se aplica en tiempo de ejecucion.
+
+## Verificacion local
+
+Comandos usados para verificar la entrega:
+
+```powershell
+./gradlew.bat :app:assembleDebug --console=plain
+./gradlew.bat :app:testDebugUnitTest --console=plain
+```
+
+## Evidencia y entrega
+
+Ruta prevista para el video del sprint:
+
+```text
+doc/evidence/v2.0.1/
+```
+
+Version de entrega final:
+- `v2.0.1`
 
 ## Estructura del repositorio
 
 ```text
 BBTraveling/
 |- app/
-|  |- src/main/java/com/example/bbtraveling/
-|  |  |- data/
-|  |  |- domain/
-|  |  |- navigation/
-|  |  \- ui/
-|  |     |- screens/
-|  |     \- theme/
+|  \- src/main/
+|     |- java/com/example/bbtraveling/
+|     |  |- data/
+|     |  |- domain/
+|     |  |- navigation/
+|     |  \- ui/
+|     \- res/
+|- doc/
 |- docs/
-|  |- app-flow.mmd
-|  |- app-uml.mmd
-|  |- diagrams/
-|  |  \- app-uml.jpg
-|  |- domain-model.mmd
-|  |- design.md
-|  |- color-palette.md
-|  |- plan_sprint01.md
-|  \- final_sprint01.md
 |- README.md
 |- CONTRIBUTING.md
 \- LICENSE
 ```
 
-## Diagrama UML de la app
-
-El diagrama UML principal se mantiene en formato editable y en formato visual:
-
-- Editable (Mermaid): `docs/app-uml.mmd`
-- Visual (para README/release): `docs/diagrams/app-uml.jpg`
-
-![Diagrama UML de BBTraveling](docs/diagrams/app-uml.jpg)
-
 ## Equipo
 
 - Anouar El Kabiri
 - Eloi Mora Palomino
-
-## Estado del proyecto
-
-- Sprint 01 completado
-- Versión de entrega: `v1.0.0`
-
-## Licencia
-
-Proyecto académico para la asignatura **Applications for Mobile Devices**.

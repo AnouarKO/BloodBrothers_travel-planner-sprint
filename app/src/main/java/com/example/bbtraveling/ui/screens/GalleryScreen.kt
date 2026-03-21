@@ -35,19 +35,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.bbtraveling.data.MockData
+import com.example.bbtraveling.R
 import com.example.bbtraveling.domain.Photo
+import com.example.bbtraveling.domain.Trip
+import com.example.bbtraveling.ui.preview.PreviewScreenContainer
+import com.example.bbtraveling.ui.preview.previewTrips
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryScreen(
     tripId: String?,
+    trips: List<Trip>,
     onBack: (() -> Unit)?
 ) {
     val scheme = MaterialTheme.colorScheme
-    val title = if (tripId == null) "Gallery" else (MockData.tripById(tripId)?.title ?: "Gallery")
-    val photos: List<Photo> = if (tripId == null) MockData.allPhotos() else MockData.tripById(tripId)?.photos.orEmpty()
+    val currentTrip = trips.firstOrNull { it.id == tripId }
+    val defaultTitle = stringResource(R.string.title_gallery)
+    val title = if (tripId == null) defaultTitle else (currentTrip?.title ?: defaultTitle)
+    val photos: List<Photo> = if (tripId == null) trips.flatMap { it.photos } else currentTrip?.photos.orEmpty()
 
     Scaffold(
         topBar = {
@@ -58,7 +66,7 @@ fun GalleryScreen(
                         IconButton(onClick = onBack) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                                contentDescription = "Back"
+                                contentDescription = stringResource(R.string.cd_back)
                             )
                         }
                     }
@@ -75,7 +83,7 @@ fun GalleryScreen(
                     Text(title, style = MaterialTheme.typography.titleLarge)
                     Spacer(Modifier.height(6.dp))
                     Text(
-                        "${photos.size} mock items ready for the gallery view.",
+                        stringResource(R.string.gallery_mock_items, photos.size),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -87,18 +95,18 @@ fun GalleryScreen(
                 OutlinedButton(onClick = { }) {
                     Icon(Icons.Rounded.AddPhotoAlternate, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Add")
+                    Text(stringResource(R.string.action_add))
                 }
                 Spacer(Modifier.width(12.dp))
                 OutlinedButton(onClick = { }) {
                     Icon(Icons.Rounded.DeleteOutline, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Delete")
+                    Text(stringResource(R.string.action_delete))
                 }
             }
 
             Spacer(Modifier.height(12.dp))
-            Text("Gallery", style = MaterialTheme.typography.titleLarge)
+            Text(stringResource(R.string.gallery_section_title), style = MaterialTheme.typography.titleLarge)
             Spacer(Modifier.height(8.dp))
 
             LazyVerticalGrid(
@@ -150,5 +158,18 @@ private fun PhotoTile(photo: Photo) {
             Spacer(Modifier.height(4.dp))
             Text(photo.spot, color = Color.White.copy(alpha = 0.9f))
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun GalleryScreenPreview() {
+    val trips = previewTrips()
+    PreviewScreenContainer {
+        GalleryScreen(
+            tripId = trips.firstOrNull()?.id,
+            trips = trips,
+            onBack = {}
+        )
     }
 }

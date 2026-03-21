@@ -27,8 +27,11 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.bbtraveling.R
+import com.example.bbtraveling.ui.preview.PreviewScreenContainer
 import kotlinx.coroutines.delay
 
 @Composable
@@ -75,13 +78,13 @@ fun SplashScreen(
             )
             Spacer(Modifier.height(16.dp))
             Text(
-                text = "BBTraveling",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineLarge,
                 color = Color.White
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = "Built on Brotherhood. Driven by Adventure.",
+                text = stringResource(R.string.splash_tagline),
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White.copy(alpha = 0.92f)
             )
@@ -93,9 +96,17 @@ fun SplashScreen(
             )
             Spacer(Modifier.height(12.dp))
             Text(
-                text = "Version 1.0.0 | Sprint 01",
+                text = stringResource(R.string.splash_version_label),
                 color = Color.White.copy(alpha = 0.92f)
             )
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun SplashScreenPreview() {
+    PreviewScreenContainer {
+        SplashScreen(onFinished = {})
     }
 }

@@ -2,12 +2,28 @@
 .DS_Store
 
 .gradle/
+.kotlin/
 .idea/
 local.properties
-app/.gitignore
 
 build/
 app/build/
+**/build/
 captures/
 .externalNativeBuild/
 .cxx/
+
+*.apk
+*.aab
+*.ap_
+*.hprof
+*.jks
+*.keystore
+*.orig
+*.rej
+
+LAB_SPRINT01.pdf
+LAB_SPRINT02.pdf
+Sprint 01*All Screens.pdf
+
+lint.xml

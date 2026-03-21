@@ -227,3 +227,24 @@ El diagrama de dominio detallado se mantiene en `docs/domain-model.mmd`.
 - Preferencias con idioma mock: `English`, `Espanol`, `Catalan`
 
 ---
+
+## 7. Actualizacion Sprint 02 (Logic)
+
+Arquitectura implementada para el segundo sprint:
+
+- `UI -> ViewModel -> Repository -> DataSource`
+- `FakeTripDataSource` como almacenamiento in-memory
+- `TripRepository` + `TripRepositoryImpl` para CRUD de viajes y actividades
+- `SharedPreferencesSettingsRepository` para persistir ajustes de usuario
+
+Se anadieron validaciones funcionales para:
+
+- campos obligatorios
+- fechas de viaje (inicio < fin y futuras)
+- fechas de actividad dentro del rango del viaje
+
+Ademas:
+
+- Se aplico soporte multiidioma real (`en`, `es`, `ca`) con recursos por locale
+- Se añadieron logs de operaciones y errores de validacion para Logcat
+- Se incorporaron pruebas unitarias de CRUD y validaciones base
