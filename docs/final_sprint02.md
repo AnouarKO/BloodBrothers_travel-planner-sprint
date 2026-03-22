@@ -1,6 +1,6 @@
 # Sprint 02 - Final Report
 
-Version: `2.0.1`  
+Version: `2.0.2`  
 Equipo: Anouar El Kabiri, Eloi Mora Palomino
 
 ## 1. Sprint Goal
@@ -31,7 +31,7 @@ Completar la capa funcional de `BBTraveling` con:
 | T3.1 | Anadir logs para operaciones y errores | Eloi | Completada |
 | T3.2 | Crear unit tests de CRUD | Anouar | Completada |
 | T3.3 | Actualizar README y docs del sprint | Eloi | Completada |
-| T3.4 | Preparar y entregar release `v2.0.1` | Anouar | Completada |
+| T3.4 | Preparar y entregar release `v2.0.2` | Anouar | Completada |
 
 Resumen funcional del backlog:
 - Arquitectura `UI -> ViewModel -> Repository -> DataSource` implementada.
@@ -43,7 +43,7 @@ Resumen funcional del backlog:
 - Selector de ciudad y pais para que los viajes creados manualmente sigan el mismo formato visual que los viajes mock.
 - Categorias y plantillas predefinidas para agilizar la creacion de actividades.
 - Recursos multi-language separados en `values`, `values-es` y `values-ca`.
-- Evidencia del sprint publicada mediante enlace externo en `doc/evidence/v2.0.1/`.
+- Evidencia del sprint publicada mediante enlace externo en `doc/evidence/v2.0.2/`.
 
 ---
 
@@ -56,8 +56,8 @@ Resumen funcional del backlog:
 - [x] Cambio de idioma funcional en tiempo de ejecucion
 - [x] Recursos de idioma preparados en `values`, `values-es` y `values-ca`
 - [x] Logs basicos de operaciones y errores
-- [x] Evidencia del video disponible en `doc/evidence/v2.0.1/`
-- [x] Release final preparada (`v2.0.1`)
+- [x] Evidencia del video disponible en `doc/evidence/v2.0.2/`
+- [x] Release final preparada (`v2.0.2`)
 
 Validacion tecnica:
 - [x] `./gradlew.bat :app:assembleDebug --console=plain`

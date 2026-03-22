@@ -173,7 +173,7 @@
     <string name="about_stack_title">Stack tÃ©cnico</string>
     <string name="about_stack_body">Kotlin, Jetpack Compose, Material 3 y Navigation Compose</string>
     <string name="about_version_title">VersiÃ³n</string>
-    <string name="about_version_body">VersiÃ³n 2.0.1 | namespace com.example.bbtraveling</string>
+    <string name="about_version_body">VersiÃ³n 2.0.2 | namespace com.example.bbtraveling</string>
     <string name="about_license_title">Licencia</string>
     <string name="about_license_body">Proyecto acadÃ©mico mock para entrega en clase</string>
 
@@ -189,10 +189,12 @@
     <string name="terms_acceptance_body">Usar el prototipo implica entender que es un mock acadÃ©mico preparado para evaluaciÃ³n en marzo de 2026.</string>
 
     <string name="splash_tagline">Built on Brotherhood. Driven by Adventure.</string>
-    <string name="splash_version_label">VersiÃ³n 2.0.1 | Sprint 02</string>
+    <string name="splash_version_label">VersiÃ³n 2.0.2 | Sprint 02</string>
 
     <string name="lang_english">InglÃ©s</string>
     <string name="lang_spanish">EspaÃ±ol</string>
     <string name="lang_catalan">CatalÃ¡n</string>
 </resources>
+
+
 

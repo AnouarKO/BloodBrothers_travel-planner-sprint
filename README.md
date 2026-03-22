@@ -101,11 +101,11 @@ Comandos usados para verificar la entrega:
 Ruta prevista para el video del sprint:
 
 ```text
-doc/evidence/v2.0.1/
+doc/evidence/v2.0.2/
 ```
 
 Version de entrega final:
-- `v2.0.1`
+- `v2.0.2`
 
 ## Estructura del repositorio
 
