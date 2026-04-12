@@ -1,4 +1,4 @@
-# BBTraveling - (BloodBrothersTravelling
+# BBTraveling (BloodBrothersTravelling)
 
 Proyecto Android de planificacion de viajes para la asignatura **Applications for Mobile Devices**.
 
