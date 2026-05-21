@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.example.bbtraveling.data.local.TravelDatabase
+import com.example.bbtraveling.data.local.entity.ItineraryItemEntity
 import com.example.bbtraveling.data.local.entity.TripEntity
 import com.example.bbtraveling.data.local.entity.UserProfileEntity
 import com.example.bbtraveling.domain.ActivityCategory
@@ -146,6 +147,176 @@ class RoomTripRepositoryTest {
         assertEquals("Museum", repository.trips.value.first { it.id == tripId }.activities.first().title)
     }
 
+    @Test
+    fun addActivity_outsideTripRangeFails() = runBlocking {
+        database.userProfileDao().upsertUser(user(login = "owner@example.com", username = "owner"))
+        database.tripDao().upsertTrip(trip(id = "owner-trip", ownerLogin = "owner@example.com", title = "Lisbon"))
+        authRepository.currentUserFlow.value = authUser("owner@example.com")
+        val repository = createRepository()
+        waitUntil { repository.trips.value.any { it.id == "owner-trip" } }
+
+        val result = repository.addActivity(
+            tripId = "owner-trip",
+            draft = ActivityDraft(
+                title = "Invalid activity",
+                description = "Outside range",
+                date = LocalDate.of(2026, 6, 10),
+                time = LocalTime.of(9, 30),
+                category = ActivityCategory.Other,
+                costEur = 10.0
+            )
+        )
+
+        assertTrue(result is OperationResult.Failure)
+        result as OperationResult.Failure
+        assertTrue(result.fieldErrors.containsKey(TravelValidator.FIELD_DATE))
+    }
+
+    @Test
+    fun editTrip_updatesExistingTrip() = runBlocking {
+        database.userProfileDao().upsertUser(user(login = "owner@example.com", username = "owner"))
+        database.tripDao().upsertTrip(trip(id = "owner-trip", ownerLogin = "owner@example.com", title = "Lisbon"))
+        authRepository.currentUserFlow.value = authUser("owner@example.com")
+        val repository = createRepository()
+        waitUntil { repository.trips.value.any { it.id == "owner-trip" } }
+
+        val result = repository.editTrip(
+            tripId = "owner-trip",
+            draft = validTripDraft(title = "Edited Lisbon").copy(
+                city = "Porto",
+                country = "Portugal",
+                status = TripStatus.Completed,
+                budgetEur = 450.0
+            )
+        )
+
+        assertTrue(result is OperationResult.Success)
+        waitUntil { repository.trips.value.any { it.title == "Edited Lisbon" } }
+        val updatedTrip = repository.trips.value.first { it.id == "owner-trip" }
+        assertEquals("Porto, Portugal", updatedTrip.destination)
+        assertEquals(TripStatus.Completed, updatedTrip.status)
+        assertEquals(450.0, updatedTrip.budgetEur, 0.001)
+    }
+
+    @Test
+    fun editTrip_withActivitiesOutsideNewRangeFails() = runBlocking {
+        database.userProfileDao().upsertUser(user(login = "owner@example.com", username = "owner"))
+        database.tripDao().upsertTrip(trip(id = "owner-trip", ownerLogin = "owner@example.com", title = "Lisbon"))
+        database.itineraryItemDao().upsertItem(activity(id = "activity-1", tripId = "owner-trip"))
+        authRepository.currentUserFlow.value = authUser("owner@example.com")
+        val repository = createRepository()
+        waitUntil { repository.trips.value.firstOrNull { it.id == "owner-trip" }?.activities?.size == 1 }
+
+        val result = repository.editTrip(
+            tripId = "owner-trip",
+            draft = validTripDraft(title = "Narrow Lisbon").copy(
+                startDate = LocalDate.of(2026, 6, 3),
+                endDate = LocalDate.of(2026, 6, 4)
+            ),
+            moveActivitiesWithTrip = false
+        )
+
+        assertTrue(result is OperationResult.Failure)
+        result as OperationResult.Failure
+        assertTrue(result.fieldErrors.containsKey(TravelValidator.FIELD_DATE))
+    }
+
+    @Test
+    fun editTrip_withMoveActivitiesWithTripReschedulesActivities() = runBlocking {
+        database.userProfileDao().upsertUser(user(login = "owner@example.com", username = "owner"))
+        database.tripDao().upsertTrip(trip(id = "owner-trip", ownerLogin = "owner@example.com", title = "Lisbon"))
+        database.itineraryItemDao().upsertItem(activity(id = "activity-1", tripId = "owner-trip"))
+        authRepository.currentUserFlow.value = authUser("owner@example.com")
+        val repository = createRepository()
+        waitUntil { repository.trips.value.firstOrNull { it.id == "owner-trip" }?.activities?.size == 1 }
+
+        val result = repository.editTrip(
+            tripId = "owner-trip",
+            draft = validTripDraft(title = "Rescheduled Lisbon").copy(
+                startDate = LocalDate.of(2026, 7, 10),
+                endDate = LocalDate.of(2026, 7, 12)
+            ),
+            moveActivitiesWithTrip = true
+        )
+
+        assertTrue(result is OperationResult.Success)
+        waitUntil {
+            repository.trips.value
+                .firstOrNull { it.id == "owner-trip" }
+                ?.activities
+                ?.firstOrNull()
+                ?.date == LocalDate.of(2026, 7, 11)
+        }
+        val updatedTrip = repository.trips.value.first { it.id == "owner-trip" }
+        assertEquals(LocalDate.of(2026, 7, 10), updatedTrip.startDate)
+        assertEquals(LocalDate.of(2026, 7, 11), updatedTrip.activities.first().date)
+    }
+
+    @Test
+    fun deleteTrip_removesTripFromDatabase() = runBlocking {
+        database.userProfileDao().upsertUser(user(login = "owner@example.com", username = "owner"))
+        database.tripDao().upsertTrip(trip(id = "owner-trip", ownerLogin = "owner@example.com", title = "Lisbon"))
+        authRepository.currentUserFlow.value = authUser("owner@example.com")
+        val repository = createRepository()
+        waitUntil { repository.trips.value.any { it.id == "owner-trip" } }
+
+        val result = repository.deleteTrip("owner-trip")
+
+        assertTrue(result is OperationResult.Success)
+        waitUntil { repository.trips.value.none { it.id == "owner-trip" } }
+    }
+
+    @Test
+    fun updateActivity_updatesExistingActivity() = runBlocking {
+        database.userProfileDao().upsertUser(user(login = "owner@example.com", username = "owner"))
+        database.tripDao().upsertTrip(trip(id = "owner-trip", ownerLogin = "owner@example.com", title = "Lisbon"))
+        database.itineraryItemDao().upsertItem(activity(id = "activity-1", tripId = "owner-trip"))
+        authRepository.currentUserFlow.value = authUser("owner@example.com")
+        val repository = createRepository()
+        waitUntil { repository.trips.value.firstOrNull { it.id == "owner-trip" }?.activities?.size == 1 }
+
+        val result = repository.updateActivity(
+            tripId = "owner-trip",
+            activityId = "activity-1",
+            draft = ActivityDraft(
+                title = "Updated Activity",
+                description = "Updated itinerary item",
+                date = LocalDate.of(2026, 6, 2),
+                time = LocalTime.of(16, 0),
+                category = ActivityCategory.Transport,
+                costEur = 18.0
+            )
+        )
+
+        assertTrue(result is OperationResult.Success)
+        waitUntil {
+            repository.trips.value
+                .firstOrNull { it.id == "owner-trip" }
+                ?.activities
+                ?.firstOrNull()
+                ?.title == "Updated Activity"
+        }
+        val activity = repository.trips.value.first { it.id == "owner-trip" }.activities.first()
+        assertEquals(LocalTime.of(16, 0), activity.time)
+        assertEquals(ActivityCategory.Transport, activity.category)
+        assertEquals(18.0, activity.costEur, 0.001)
+    }
+
+    @Test
+    fun deleteActivity_removesActivity() = runBlocking {
+        database.userProfileDao().upsertUser(user(login = "owner@example.com", username = "owner"))
+        database.tripDao().upsertTrip(trip(id = "owner-trip", ownerLogin = "owner@example.com", title = "Lisbon"))
+        database.itineraryItemDao().upsertItem(activity(id = "activity-1", tripId = "owner-trip"))
+        authRepository.currentUserFlow.value = authUser("owner@example.com")
+        val repository = createRepository()
+        waitUntil { repository.trips.value.firstOrNull { it.id == "owner-trip" }?.activities?.size == 1 }
+
+        val result = repository.deleteActivity(tripId = "owner-trip", activityId = "activity-1")
+
+        assertTrue(result is OperationResult.Success)
+        waitUntil { repository.trips.value.firstOrNull { it.id == "owner-trip" }?.activities?.isEmpty() == true }
+    }
+
     private fun createRepository(): RoomTripRepository {
         return RoomTripRepository(
             tripDao = database.tripDao(),
@@ -206,6 +377,20 @@ class RoomTripRepositoryTest {
             travelers = 1,
             budgetEur = 300.0,
             createdAt = LocalDateTime.of(2026, 5, 1, 9, 0)
+        )
+    }
+
+    private fun activity(id: String, tripId: String): ItineraryItemEntity {
+        return ItineraryItemEntity(
+            id = id,
+            tripId = tripId,
+            title = "Seed Activity",
+            description = "Seed itinerary item",
+            date = LocalDate.of(2026, 6, 2),
+            time = LocalTime.of(10, 0),
+            category = ActivityCategory.Museum,
+            costEur = 30.0,
+            createdAt = LocalDateTime.of(2026, 5, 1, 10, 0)
         )
     }
 
