@@ -15,8 +15,8 @@ android {
         applicationId = "com.example.bbtraveling"
         minSdk = 24
         targetSdk = 36
-        versionCode = 4
-        versionName = "3.0.0"
+        versionCode = 5
+        versionName = "4.0.0"
     }
 
     buildTypes {

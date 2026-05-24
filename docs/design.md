@@ -233,8 +233,8 @@ El diagrama de dominio detallado se mantiene en `docs/domain-model.mmd`.
 Arquitectura implementada para el segundo sprint:
 
 - `UI -> ViewModel -> Repository -> DataSource`
-- `FakeTripDataSource` como almacenamiento in-memory
-- `TripRepository` + `TripRepositoryImpl` para CRUD de viajes y actividades
+- DataSource in-memory como almacenamiento temporal de Sprint 02
+- `TripRepository` con implementación in-memory para CRUD de viajes y actividades
 - `SharedPreferencesSettingsRepository` para persistir ajustes de usuario
 
 Se añadieron validaciones funcionales para:
@@ -318,11 +318,79 @@ La cobertura del Sprint 03 incluye unit tests JVM con Robolectric para:
 
 - `ExampleUnitTest`: entorno básico.
 - `TripTest`: cálculos de dominio.
-- `TripRepositoryImplTest`: CRUD in-memory, validaciones y título duplicado.
 - `TravelDatabaseTest`: Room Database, DAOs y relaciones.
-- `RoomTripRepositoryTest`: CRUD persistente y filtrado por usuario autenticado.
+- `RoomTripRepositoryTest`: CRUD persistente, filtrado por usuario autenticado, edición, borrado y validaciones de trips e itinerario.
 - `RoomUserProfileRepositoryTest`: mapeo y observación de perfil local.
 - `AuthViewModelTest`: login, registro, recover password, confirmación de password y edad mínima.
 - `SettingsViewModelTest`: perfil autenticado, idioma, tema y preferencias sin cuenta.
 - `TripsViewModelTest`: carga, creación y validaciones desde ViewModel.
 - `MainDispatcherRule`: soporte para corrutinas en tests.
+
+---
+
+## 9. Actualización Sprint 04 (Retrofit, reservas e imágenes)
+
+La arquitectura se amplía manteniendo el mismo flujo por capas:
+
+```text
+Compose UI
+  -> ViewModel
+  -> Repository
+  -> Retrofit API / Room
+```
+
+### Red y DI
+
+- `NetworkModule` provee `OkHttpClient`, `Retrofit` y `HotelApiService`.
+- `RepositoryModule` enlaza `HotelBookingRepository` con `HotelBookingRepositoryImpl` usando `@Binds`.
+- La API remota se consume con Retrofit, Gson y llamadas suspendidas.
+- Se habilita cleartext traffic porque la API académica del Sprint04 usa HTTP.
+
+### Persistencia Room
+
+Se añaden dos tablas:
+
+- `hotel_reservations`
+  - Guarda la reserva remota, hotel, habitación, fechas, huésped y relación con `tripId`.
+  - Se asocia al usuario autenticado mediante `ownerLogin`.
+- `trip_images`
+  - Guarda URIs/referencias de imágenes para cada viaje.
+  - Incluye imágenes devueltas por la API y las añadidas desde la galería.
+
+Relaciones nuevas:
+
+```text
+users.login 1 --- N hotel_reservations.ownerLogin
+trips.id    1 --- N hotel_reservations.tripId
+users.login 1 --- N trip_images.ownerLogin
+trips.id    1 --- N trip_images.tripId
+```
+
+### Pantallas
+
+- `HotelBookingScreen`: búsqueda de hoteles por ciudad y fechas con date pickers.
+- `HotelBookingScreen`: listado de reservas locales y cancelación de reservas.
+- `GalleryScreen`: galería específica por viaje con imágenes persistidas en Room.
+
+### Estrategia de reserva
+
+Al reservar una habitación:
+
+1. Retrofit crea la reserva remota.
+2. Room crea un viaje local con destino, fechas, hotel, habitación y presupuesto calculado por noches.
+3. Room guarda la reserva en `hotel_reservations`.
+4. Room guarda imágenes del hotel/habitación en `trip_images`.
+
+Al cancelar:
+
+1. Se llama al endpoint de cancelación.
+2. Se elimina la reserva local.
+3. Se elimina el viaje generado y sus imágenes asociadas por cascada.
+
+### Tests
+
+La cobertura del Sprint04 añade:
+
+- `HotelBookingRepositoryImplTest`: mapeo DTO-domain, reserva, cancelación y galería.
+- `HotelBookingViewModelTest`: validación de fechas, búsqueda, reserva y cancelación.
+- `TravelDatabaseTest`: DAOs de reservas e imágenes.
