@@ -1,10 +1,12 @@
 package com.example.bbtraveling.di
 
 import com.example.bbtraveling.data.repository.FirebaseAuthRepository
+import com.example.bbtraveling.data.repository.HotelBookingRepositoryImpl
 import com.example.bbtraveling.data.repository.RoomTripRepository
 import com.example.bbtraveling.data.repository.RoomUserProfileRepository
 import com.example.bbtraveling.data.settings.SharedPreferencesSettingsRepository
 import com.example.bbtraveling.domain.repository.AuthRepository
+import com.example.bbtraveling.domain.repository.HotelBookingRepository
 import com.example.bbtraveling.domain.repository.TripRepository
 import com.example.bbtraveling.domain.repository.UserProfileRepository
 import com.example.bbtraveling.domain.repository.UserSettingsRepository
@@ -29,6 +31,12 @@ abstract class RepositoryModule {
     abstract fun bindTripRepository(
         repository: RoomTripRepository
     ): TripRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHotelBookingRepository(
+        repository: HotelBookingRepositoryImpl
+    ): HotelBookingRepository
 
     @Binds
     @Singleton
