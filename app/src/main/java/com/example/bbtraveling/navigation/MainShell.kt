@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.List
 import androidx.compose.material.icons.rounded.Collections
+import androidx.compose.material.icons.rounded.Hotel
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Icon
@@ -29,10 +30,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bbtraveling.R
 import com.example.bbtraveling.ui.screens.AboutScreen
 import com.example.bbtraveling.ui.screens.GalleryScreen
+import com.example.bbtraveling.ui.screens.HotelBookingScreen
 import com.example.bbtraveling.ui.screens.HomeScreen
 import com.example.bbtraveling.ui.screens.PreferencesScreen
 import com.example.bbtraveling.ui.screens.SettingsScreen
 import com.example.bbtraveling.ui.screens.TripsScreen
+import com.example.bbtraveling.ui.viewmodel.HotelBookingViewModel
 import com.example.bbtraveling.ui.viewmodel.SettingsViewModel
 import com.example.bbtraveling.ui.viewmodel.TripsViewModel
 
@@ -47,6 +50,7 @@ private data class BottomItem(
 fun MainShell(
     rootNavController: NavHostController,
     tripsViewModel: TripsViewModel,
+    hotelBookingViewModel: HotelBookingViewModel,
     settingsViewModel: SettingsViewModel,
     onLogout: () -> Unit
 ) {
@@ -56,6 +60,7 @@ fun MainShell(
     val items = listOf(
         BottomItem(Routes.Home, stringResource(R.string.nav_home), Icons.Rounded.Home),
         BottomItem(Routes.Trips, stringResource(R.string.nav_trips), Icons.AutoMirrored.Rounded.List),
+        BottomItem(Routes.Hotels, stringResource(R.string.nav_hotels), Icons.Rounded.Hotel),
         BottomItem(Routes.Gallery, stringResource(R.string.nav_gallery), Icons.Rounded.Collections),
         BottomItem(
             route = Routes.Settings,
@@ -120,10 +125,16 @@ fun MainShell(
                     onTripClick = { tripId -> rootNavController.navigate(Routes.tripDetail(tripId)) }
                 )
             }
+            composable(Routes.Hotels) {
+                HotelBookingScreen(viewModel = hotelBookingViewModel)
+            }
             composable(Routes.Gallery) {
                 GalleryScreen(
                     tripId = null,
                     trips = trips,
+                    tripImages = emptyList(),
+                    onAddTripImage = null,
+                    onDeleteTripImage = null,
                     onBack = null
                 )
             }

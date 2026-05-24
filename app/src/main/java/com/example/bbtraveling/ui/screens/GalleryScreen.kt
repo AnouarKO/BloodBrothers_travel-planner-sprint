@@ -1,9 +1,13 @@
 package com.example.bbtraveling.ui.screens
 
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,13 +38,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.bbtraveling.R
 import com.example.bbtraveling.domain.Photo
 import com.example.bbtraveling.domain.Trip
+import com.example.bbtraveling.domain.TripImage
 import com.example.bbtraveling.ui.preview.PreviewScreenContainer
 import com.example.bbtraveling.ui.preview.previewTrips
 
@@ -49,13 +57,28 @@ import com.example.bbtraveling.ui.preview.previewTrips
 fun GalleryScreen(
     tripId: String?,
     trips: List<Trip>,
+    tripImages: List<TripImage> = emptyList(),
+    onAddTripImage: ((String, String) -> Unit)? = null,
+    onDeleteTripImage: ((String) -> Unit)? = null,
     onBack: (() -> Unit)?
 ) {
     val scheme = MaterialTheme.colorScheme
+    val context = LocalContext.current
     val currentTrip = trips.firstOrNull { it.id == tripId }
     val defaultTitle = stringResource(R.string.title_gallery)
     val title = if (tripId == null) defaultTitle else (currentTrip?.title ?: defaultTitle)
     val photos: List<Photo> = if (tripId == null) trips.flatMap { it.photos } else currentTrip?.photos.orEmpty()
+    val imagePicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri != null && tripId != null && onAddTripImage != null) {
+            runCatching {
+                context.contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            }
+            onAddTripImage(uri.toString(), title)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -83,7 +106,7 @@ fun GalleryScreen(
                     Text(title, style = MaterialTheme.typography.titleLarge)
                     Spacer(Modifier.height(6.dp))
                     Text(
-                        stringResource(R.string.gallery_mock_items, photos.size),
+                        stringResource(R.string.gallery_items_ready, tripImages.size + photos.size),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -92,16 +115,13 @@ fun GalleryScreen(
             Spacer(Modifier.height(16.dp))
 
             Row(modifier = Modifier.fillMaxWidth()) {
-                OutlinedButton(onClick = { }) {
+                OutlinedButton(
+                    onClick = { imagePicker.launch(arrayOf("image/*")) },
+                    enabled = tripId != null && onAddTripImage != null
+                ) {
                     Icon(Icons.Rounded.AddPhotoAlternate, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.action_add))
-                }
-                Spacer(Modifier.width(12.dp))
-                OutlinedButton(onClick = { }) {
-                    Icon(Icons.Rounded.DeleteOutline, contentDescription = null)
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.action_delete))
+                    Text(stringResource(R.string.gallery_add_trip_image))
                 }
             }
 
@@ -115,8 +135,56 @@ fun GalleryScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                items(tripImages) { image ->
+                    TripImageTile(
+                        image = image,
+                        onDelete = onDeleteTripImage?.let { delete -> { delete(image.id) } }
+                    )
+                }
                 items(photos) { photo ->
                     PhotoTile(photo = photo)
+                }
+                if (tripImages.isEmpty() && photos.isEmpty()) {
+                    item {
+                        Text(
+                            stringResource(R.string.gallery_no_trip_images),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TripImageTile(
+    image: TripImage,
+    onDelete: (() -> Unit)?
+) {
+    Card(
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Box(
+            modifier = Modifier.fillMaxWidth().height(180.dp)
+        ) {
+            AsyncImage(
+                model = image.uri,
+                contentDescription = image.title,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+            if (onDelete != null) {
+                IconButton(
+                    onClick = onDelete,
+                    modifier = Modifier.align(Alignment.TopEnd)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.DeleteOutline,
+                        contentDescription = stringResource(R.string.cd_delete_image),
+                        tint = Color.White
+                    )
                 }
             }
         }

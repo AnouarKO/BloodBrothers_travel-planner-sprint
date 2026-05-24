@@ -7,6 +7,7 @@ object Routes {
 
     const val Home = "home"
     const val Trips = "trips"
+    const val Hotels = "hotels"
     const val Gallery = "gallery"
     const val Settings = "settings"
     const val Preferences = "preferences"

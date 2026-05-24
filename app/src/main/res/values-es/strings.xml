@@ -2,6 +2,7 @@
     <string name="app_name">BBTraveling</string>
     <string name="nav_home">Inicio</string>
     <string name="nav_trips">Viajes</string>
+    <string name="nav_hotels">Hoteles</string>
     <string name="nav_gallery">Galería</string>
     <string name="nav_settings">Ajustes</string>
 
@@ -16,6 +17,7 @@
     <string name="title_about">Acerca de</string>
     <string name="title_terms">Términos y condiciones</string>
     <string name="title_gallery">Galería</string>
+    <string name="title_hotels">Reservas de hotel</string>
     <string name="title_auth">Acceso de cuenta</string>
     <string name="title_login">Iniciar sesión</string>
     <string name="title_register">Registro</string>
@@ -23,8 +25,11 @@
 
     <string name="tab_overview">Resumen</string>
     <string name="tab_itinerary">Itinerario</string>
+    <string name="tab_search_hotels">Buscar</string>
+    <string name="tab_reservations">Reservas</string>
 
     <string name="cd_back">Atrás</string>
+    <string name="cd_delete_image">Eliminar imagen</string>
     <string name="action_open">Abrir</string>
     <string name="action_add">Añadir</string>
     <string name="action_edit">Editar</string>
@@ -35,6 +40,9 @@
     <string name="action_add_trip">Añadir viaje</string>
     <string name="action_add_activity">Añadir actividad</string>
     <string name="action_open_gallery">Abrir galería</string>
+    <string name="action_search_hotels">Buscar hoteles</string>
+    <string name="action_book_room">Reservar</string>
+    <string name="action_cancel_reservation">Cancelar reserva</string>
     <string name="action_see_all_trips">Ver todos los viajes</string>
     <string name="action_open_terms">Abrir términos y condiciones</string>
     <string name="action_accept">Aceptar</string>
@@ -181,7 +189,7 @@
     <string name="auth_need_account">¿Necesitas una cuenta?</string>
     <string name="auth_have_account">¿Ya estás registrado?</string>
     <string name="auth_recover_hint">Introduce tu correo electrónico y enviaremos un enlace para restablecer la contraseña.</string>
-    <string name="auth_register_hint">Crea la cuenta Firebase y el perfil local usados por el Sprint 03.</string>
+    <string name="auth_register_hint">Crea la cuenta Firebase y el perfil local usados por la app.</string>
     <string name="auth_email_verification_hint">Tras registrarte, verifica tu correo electrónico antes de iniciar sesión.</string>
     <string name="auth_message_account_created_verify_email">Cuenta creada. Verifica tu correo electrónico antes de iniciar sesión.</string>
     <string name="auth_message_password_recovery_sent">Se ha enviado el correo de recuperación de contraseña.</string>
@@ -208,7 +216,28 @@
     <string name="home_stat_trips">Viajes</string>
     <string name="home_stat_budget">Presupuesto</string>
     <string name="home_stat_spent">Gastado</string>
+    <string name="hotel_search_title">Buscar habitaciones disponibles</string>
+    <string name="hotel_search_hint">Elige London, Paris o Barcelona y un rango de fechas válido.</string>
+    <string name="hotel_no_results">No hay hoteles disponibles para esta búsqueda.</string>
+    <string name="hotel_no_reservations">Todavía no hay reservas de hotel.</string>
+    <string name="hotel_rating_value">Valoración: %1$d/5</string>
+    <string name="hotel_room_price">%1$s por noche</string>
+    <string name="hotel_dates_value">%1$s - %2$s</string>
+    <string name="hotel_guest_value">Huésped: %1$s</string>
+    <string name="hotel_booking_created">Reserva creada y guardada como viaje.</string>
+    <string name="hotel_booking_cancelled">Reserva cancelada.</string>
+    <string name="hotel_error_invalid_dates">La fecha de inicio debe ser anterior a la fecha de fin.</string>
+    <string name="hotel_error_search_failed">No se han podido cargar los hoteles disponibles.</string>
+    <string name="hotel_error_booking_failed">No se ha podido crear la reserva.</string>
+    <string name="hotel_error_cancel_failed">No se ha podido cancelar la reserva.</string>
+    <string name="hotel_error_auth_required">Inicia sesión antes de reservar una habitación.</string>
+    <string name="hotel_gallery_added">Imagen añadida a la galería del viaje.</string>
+    <string name="hotel_gallery_deleted">Imagen eliminada de la galería del viaje.</string>
+    <string name="hotel_gallery_error">No se ha podido actualizar la galería del viaje.</string>
     <string name="gallery_mock_items">%1$d elementos mock listos para la galería.</string>
+    <string name="gallery_items_ready">%1$d elementos listos para esta galería.</string>
+    <string name="gallery_add_trip_image">Añadir imagen</string>
+    <string name="gallery_no_trip_images">Todavía no hay imágenes guardadas para este viaje.</string>
     <string name="gallery_section_title">Galería</string>
     <string name="about_banner_subtitle">Un mock de planificador de viajes con identidad de marca para el Sprint 01.</string>
     <string name="about_team_title">Equipo</string>
@@ -216,7 +245,7 @@
     <string name="about_stack_title">Stack técnico</string>
     <string name="about_stack_body">Kotlin, Jetpack Compose, Material 3 y Navigation Compose</string>
     <string name="about_version_title">Versión</string>
-    <string name="about_version_body">Versión 3.0.0 | namespace com.example.bbtraveling</string>
+    <string name="about_version_body">Versión 4.0.0 | namespace com.example.bbtraveling</string>
     <string name="about_license_title">Licencia</string>
     <string name="about_license_body">Proyecto académico mock para entrega en clase</string>
     <string name="terms_notice_title">Aviso legal mock</string>
@@ -230,7 +259,7 @@
     <string name="terms_acceptance_title">4. Aceptación</string>
     <string name="terms_acceptance_body">Usar el prototipo implica entender que es un mock académico preparado para evaluación en marzo de 2026.</string>
     <string name="splash_tagline">Built on Brotherhood. Driven by Adventure.</string>
-    <string name="splash_version_label">Versión 3.0.0 | Sprint 03</string>
+    <string name="splash_version_label">Versión 4.0.0 | Sprint 04</string>
 
     <string name="lang_english">Inglés</string>
     <string name="lang_spanish">Español</string>

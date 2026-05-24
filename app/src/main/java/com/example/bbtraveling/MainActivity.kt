@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bbtraveling.navigation.AppNavGraph
 import com.example.bbtraveling.ui.theme.BBTravelingTheme
 import com.example.bbtraveling.ui.viewmodel.AuthViewModel
+import com.example.bbtraveling.ui.viewmodel.HotelBookingViewModel
 import com.example.bbtraveling.ui.viewmodel.SettingsViewModel
 import com.example.bbtraveling.ui.viewmodel.TripsViewModel
 import com.example.bbtraveling.domain.repository.UserSettingsRepository
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 private fun App(
     authViewModel: AuthViewModel = hiltViewModel(),
     tripsViewModel: TripsViewModel = hiltViewModel(),
+    hotelBookingViewModel: HotelBookingViewModel = hiltViewModel(),
     settingsViewModel: SettingsViewModel = hiltViewModel()
 ) {
     val settings by settingsViewModel.settings.collectAsState()
@@ -61,6 +63,7 @@ private fun App(
                 navController = navController,
                 authViewModel = authViewModel,
                 tripsViewModel = tripsViewModel,
+                hotelBookingViewModel = hotelBookingViewModel,
                 settingsViewModel = settingsViewModel
             )
         }
