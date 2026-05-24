@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import com.example.bbtraveling.data.local.TravelDatabase
 import com.example.bbtraveling.data.local.dao.AccessLogDao
+import com.example.bbtraveling.data.local.dao.HotelReservationDao
 import com.example.bbtraveling.data.local.dao.ItineraryItemDao
+import com.example.bbtraveling.data.local.dao.TripImageDao
 import com.example.bbtraveling.data.local.dao.TripDao
 import com.example.bbtraveling.data.local.dao.UserProfileDao
 import com.google.firebase.auth.FirebaseAuth
@@ -51,4 +53,10 @@ object AppModule {
 
     @Provides
     fun provideAccessLogDao(database: TravelDatabase): AccessLogDao = database.accessLogDao()
+
+    @Provides
+    fun provideHotelReservationDao(database: TravelDatabase): HotelReservationDao = database.hotelReservationDao()
+
+    @Provides
+    fun provideTripImageDao(database: TravelDatabase): TripImageDao = database.tripImageDao()
 }
