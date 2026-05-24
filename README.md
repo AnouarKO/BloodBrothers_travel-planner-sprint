@@ -118,7 +118,7 @@ Idiomas disponibles:
 
 ## Tests
 
-La suite de unit tests que se ejecuta con `:app:testDebugUnitTest` incluye `53 tests`, con `0 failures` y `0 errors` en la verificación local.
+La suite de unit tests que se ejecuta con `:app:testDebugUnitTest` incluye `54 tests`, con `0 failures` y `0 errors` en la verificación local.
 
 - `ExampleUnitTest`: test base de entorno.
 - `TripTest`: cálculos de dominio del viaje.

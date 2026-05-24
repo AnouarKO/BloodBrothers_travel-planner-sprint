@@ -47,6 +47,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.bbtraveling.R
+import com.example.bbtraveling.domain.HotelReservation
 import com.example.bbtraveling.domain.OperationResult
 import com.example.bbtraveling.domain.Trip
 import com.example.bbtraveling.domain.TripDraft
@@ -76,12 +77,17 @@ private sealed class TripFilter(@param:androidx.annotation.StringRes val labelRe
 @Composable
 fun TripsScreen(
     trips: List<Trip>,
+    hotelReservations: List<HotelReservation> = emptyList(),
     tripsViewModel: TripsViewModel,
+    onCancelHotelReservation: (String) -> Unit = {},
     onTripClick: (String) -> Unit
 ) {
     var selectedFilter by remember { mutableIntStateOf(0) }
     var editorTrip by remember { mutableStateOf<Trip?>(null) }
     var openCreateDialog by remember { mutableStateOf(false) }
+    val reservationsByTripId = remember(hotelReservations) {
+        hotelReservations.associateBy { reservation -> reservation.tripId }
+    }
 
     val filters = listOf(
         TripFilter.All,
@@ -130,11 +136,19 @@ fun TripsScreen(
                 }
 
                 items(filteredTrips) { trip ->
+                    val hotelReservation = reservationsByTripId[trip.id]
                     TripRowCard(
                         trip = trip,
+                        hotelReservation = hotelReservation,
                         onOpen = { onTripClick(trip.id) },
                         onEdit = { editorTrip = trip },
-                        onDelete = { tripsViewModel.deleteTrip(trip.id) }
+                        onDelete = {
+                            if (hotelReservation != null) {
+                                onCancelHotelReservation(hotelReservation.id)
+                            } else {
+                                tripsViewModel.deleteTrip(trip.id)
+                            }
+                        }
                     )
                 }
             }
@@ -194,6 +208,7 @@ private fun SummaryCard(
 @Composable
 private fun TripRowCard(
     trip: Trip,
+    hotelReservation: HotelReservation?,
     onOpen: () -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit
@@ -208,6 +223,14 @@ private fun TripRowCard(
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = trip.title, style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(4.dp))
+            if (hotelReservation != null) {
+                Text(
+                    text = stringResource(R.string.trip_hotel_reservation_badge),
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.labelLarge
+                )
+                Spacer(Modifier.height(4.dp))
+            }
             Text(text = formatDateRange(trip.startDate, trip.endDate))
             Spacer(Modifier.height(4.dp))
             if (trip.destination.isNotBlank()) {
@@ -241,16 +264,34 @@ private fun TripRowCard(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+            if (hotelReservation != null) {
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.trip_hotel_reservation_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
             Spacer(Modifier.height(10.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 OutlinedButton(onClick = onOpen, modifier = Modifier.weight(1f)) {
                     Text(stringResource(R.string.action_open))
                 }
-                OutlinedButton(onClick = onEdit, modifier = Modifier.weight(1f)) {
-                    Text(stringResource(R.string.action_edit))
+                if (hotelReservation == null) {
+                    OutlinedButton(onClick = onEdit, modifier = Modifier.weight(1f)) {
+                        Text(stringResource(R.string.action_edit))
+                    }
                 }
                 OutlinedButton(onClick = onDelete, modifier = Modifier.weight(1f)) {
-                    Text(stringResource(R.string.action_delete))
+                    Text(
+                        stringResource(
+                            if (hotelReservation == null) {
+                                R.string.action_delete
+                            } else {
+                                R.string.action_cancel_reservation
+                            }
+                        )
+                    )
                 }
             }
         }

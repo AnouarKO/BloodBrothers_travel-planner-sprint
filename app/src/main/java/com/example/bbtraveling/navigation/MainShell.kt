@@ -56,6 +56,7 @@ fun MainShell(
 ) {
     val mainNavController = rememberNavController()
     val trips by tripsViewModel.trips.collectAsState()
+    val hotelReservations by hotelBookingViewModel.reservations.collectAsState()
 
     val items = listOf(
         BottomItem(Routes.Home, stringResource(R.string.nav_home), Icons.Rounded.Home),
@@ -121,7 +122,9 @@ fun MainShell(
             composable(Routes.Trips) {
                 TripsScreen(
                     trips = trips,
+                    hotelReservations = hotelReservations,
                     tripsViewModel = tripsViewModel,
+                    onCancelHotelReservation = hotelBookingViewModel::cancelReservation,
                     onTripClick = { tripId -> rootNavController.navigate(Routes.tripDetail(tripId)) }
                 )
             }

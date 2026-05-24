@@ -10,7 +10,6 @@ import com.example.bbtraveling.domain.TripImage
 import com.example.bbtraveling.domain.repository.HotelBookingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
-import java.time.Month
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,8 +22,8 @@ import kotlinx.coroutines.launch
 
 data class HotelBookingUiState(
     val city: String = HotelBookingViewModel.DEFAULT_CITY,
-    val startDate: LocalDate = defaultHotelStartDate(),
-    val endDate: LocalDate = defaultHotelStartDate().plusDays(2),
+    val startDate: LocalDate? = null,
+    val endDate: LocalDate? = null,
     val hotels: List<Hotel> = emptyList(),
     val searched: Boolean = false,
     val loading: Boolean = false,
@@ -34,6 +33,7 @@ data class HotelBookingUiState(
 
 enum class HotelBookingMessage {
     SearchFailed,
+    DatesRequired,
     InvalidDates,
     AuthRequired,
     BookingCreated,
@@ -74,7 +74,13 @@ class HotelBookingViewModel @Inject constructor(
 
     fun searchHotels() {
         val state = _uiState.value
-        if (!state.startDate.isBefore(state.endDate)) {
+        val startDate = state.startDate
+        val endDate = state.endDate
+        if (startDate == null || endDate == null) {
+            _uiState.update { it.copy(error = HotelBookingMessage.DatesRequired, message = null) }
+            return
+        }
+        if (!startDate.isBefore(endDate)) {
             _uiState.update { it.copy(error = HotelBookingMessage.InvalidDates, message = null) }
             return
         }
@@ -83,8 +89,8 @@ class HotelBookingViewModel @Inject constructor(
             _uiState.update { it.copy(loading = true, searched = true, error = null, message = null) }
             repository.searchHotels(
                 city = state.city,
-                startDate = state.startDate,
-                endDate = state.endDate
+                startDate = startDate,
+                endDate = endDate
             ).fold(
                 onSuccess = { hotels ->
                     _uiState.update { it.copy(hotels = hotels, loading = false) }
@@ -103,7 +109,13 @@ class HotelBookingViewModel @Inject constructor(
 
     fun bookRoom(hotel: Hotel, room: HotelRoom) {
         val state = _uiState.value
-        if (!state.startDate.isBefore(state.endDate)) {
+        val startDate = state.startDate
+        val endDate = state.endDate
+        if (startDate == null || endDate == null) {
+            _uiState.update { it.copy(error = HotelBookingMessage.DatesRequired, message = null) }
+            return
+        }
+        if (!startDate.isBefore(endDate)) {
             _uiState.update { it.copy(error = HotelBookingMessage.InvalidDates, message = null) }
             return
         }
@@ -113,8 +125,8 @@ class HotelBookingViewModel @Inject constructor(
             val result = repository.bookRoom(
                 hotel = hotel,
                 room = room,
-                startDate = state.startDate,
-                endDate = state.endDate
+                startDate = startDate,
+                endDate = endDate
             )
             _uiState.update {
                 it.copy(
@@ -193,10 +205,4 @@ class HotelBookingViewModel @Inject constructor(
         private const val ERROR_AUTH_REQUIRED = "User must be logged in."
         private const val ERROR_INVALID_DATES = "Start date must be before end date."
     }
-}
-
-private fun defaultHotelStartDate(): LocalDate {
-    val today = LocalDate.now()
-    val year = if (today.monthValue <= Month.JUNE.value) today.year else today.year + 1
-    return LocalDate.of(year, Month.JUNE, 10)
 }

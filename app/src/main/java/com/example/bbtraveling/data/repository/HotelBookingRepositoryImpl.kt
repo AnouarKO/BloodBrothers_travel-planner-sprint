@@ -19,6 +19,7 @@ import com.example.bbtraveling.domain.TripImage
 import com.example.bbtraveling.domain.TripStatus
 import com.example.bbtraveling.domain.repository.AuthRepository
 import com.example.bbtraveling.domain.repository.HotelBookingRepository
+import com.example.bbtraveling.domain.repository.UserProfileRepository
 import java.time.Clock
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -39,6 +40,7 @@ class HotelBookingRepositoryImpl @Inject constructor(
     private val reservationDao: HotelReservationDao,
     private val tripImageDao: TripImageDao,
     private val authRepository: AuthRepository,
+    private val userProfileRepository: UserProfileRepository,
     private val clock: Clock
 ) : HotelBookingRepository {
 
@@ -83,7 +85,10 @@ class HotelBookingRepositoryImpl @Inject constructor(
         }
 
         return try {
-            val guestName = owner.login.substringBefore("@").ifBlank { owner.login }
+            val guestName = userProfileRepository.getUser(owner.login)
+                ?.username
+                ?.ifBlank { null }
+                ?: owner.login.substringBefore("@").ifBlank { owner.login }
             val remoteReservation = api.reserveRoom(
                 groupId = GROUP_ID,
                 request = ReserveRequestDto(

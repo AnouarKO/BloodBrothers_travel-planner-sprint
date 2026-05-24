@@ -226,11 +226,14 @@
     <string name="hotel_guest_value">Huésped: %1$s</string>
     <string name="hotel_booking_created">Reserva creada y guardada como viaje.</string>
     <string name="hotel_booking_cancelled">Reserva cancelada.</string>
+    <string name="hotel_error_dates_required">Selecciona la fecha de inicio y la fecha de fin.</string>
     <string name="hotel_error_invalid_dates">La fecha de inicio debe ser anterior a la fecha de fin.</string>
     <string name="hotel_error_search_failed">No se han podido cargar los hoteles disponibles.</string>
     <string name="hotel_error_booking_failed">No se ha podido crear la reserva.</string>
     <string name="hotel_error_cancel_failed">No se ha podido cancelar la reserva.</string>
     <string name="hotel_error_auth_required">Inicia sesión antes de reservar una habitación.</string>
+    <string name="trip_hotel_reservation_badge">Reserva de hotel</string>
+    <string name="trip_hotel_reservation_hint">Este viaje está vinculado a una reserva de hotel. Para cambiar fechas, cancélala y crea una nueva reserva.</string>
     <string name="hotel_gallery_added">Imagen añadida a la galería del viaje.</string>
     <string name="hotel_gallery_deleted">Imagen eliminada de la galería del viaje.</string>
     <string name="hotel_gallery_error">No se ha podido actualizar la galería del viaje.</string>

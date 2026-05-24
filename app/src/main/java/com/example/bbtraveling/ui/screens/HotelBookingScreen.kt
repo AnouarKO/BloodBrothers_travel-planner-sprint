@@ -266,7 +266,7 @@ private fun CityField(
 @Composable
 private fun DateField(
     label: String,
-    date: LocalDate,
+    date: LocalDate?,
     onDateSelected: (LocalDate) -> Unit
 ) {
     var datePickerVisible by remember { mutableStateOf(false) }
@@ -278,11 +278,11 @@ private fun DateField(
         ) {
             Icon(Icons.Rounded.Event, contentDescription = null)
             Spacer(Modifier.width(8.dp))
-            Text(date.format(DISPLAY_DATE_FORMAT))
+            Text(date?.format(DISPLAY_DATE_FORMAT) ?: stringResource(R.string.placeholder_select_date))
         }
     }
     if (datePickerVisible) {
-        val datePickerState = rememberDatePickerState(initialSelectedDateMillis = date.toEpochMillis())
+        val datePickerState = rememberDatePickerState(initialSelectedDateMillis = date?.toEpochMillis())
         DatePickerDialog(
             onDismissRequest = { datePickerVisible = false },
             confirmButton = {
@@ -450,7 +450,7 @@ private fun ReservationCard(
                         reservation.endDate.format(DISPLAY_DATE_FORMAT)
                     )
                 )
-                Text(stringResource(R.string.hotel_guest_value, reservation.guestEmail))
+                Text(stringResource(R.string.hotel_guest_value, reservation.guestName))
                 Text(stringResource(R.string.hotel_room_price, formatEuro(reservation.roomPrice)))
             }
         }
@@ -476,6 +476,7 @@ private fun EmptyCard(text: String) {
 private fun HotelBookingMessage.stringResId(): Int {
     return when (this) {
         HotelBookingMessage.SearchFailed -> R.string.hotel_error_search_failed
+        HotelBookingMessage.DatesRequired -> R.string.hotel_error_dates_required
         HotelBookingMessage.InvalidDates -> R.string.hotel_error_invalid_dates
         HotelBookingMessage.AuthRequired -> R.string.hotel_error_auth_required
         HotelBookingMessage.BookingCreated -> R.string.hotel_booking_created

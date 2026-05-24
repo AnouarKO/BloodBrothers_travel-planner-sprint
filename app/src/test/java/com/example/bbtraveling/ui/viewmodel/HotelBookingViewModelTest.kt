@@ -33,6 +33,14 @@ class HotelBookingViewModelTest {
     }
 
     @Test
+    fun searchHotels_withoutDatesSetsRequiredErrorWithoutCallingRepository() {
+        viewModel.searchHotels()
+
+        assertEquals(HotelBookingMessage.DatesRequired, viewModel.uiState.value.error)
+        assertEquals(0, repository.searchCalls)
+    }
+
+    @Test
     fun searchHotels_withInvalidDateRangeSetsErrorWithoutCallingRepository() {
         val startDate = LocalDate.of(2026, 6, 5)
         viewModel.updateStartDate(startDate)

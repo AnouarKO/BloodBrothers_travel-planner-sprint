@@ -102,6 +102,7 @@ class HotelBookingRepositoryImplTest {
         val reservations = database.hotelReservationDao().observeReservationsForOwner("owner@example.com").first()
         assertEquals(1, reservations.size)
         assertEquals("reservation-1", reservations.first().id)
+        assertEquals("owner", api.lastReserveRequest?.guestName)
         val trips = database.tripDao().observeTripsWithActivitiesForOwner("owner@example.com").first()
         assertEquals(1, trips.size)
         assertEquals("Barcelona, Spain", trips.first().trip.city + ", " + trips.first().trip.country)
@@ -177,6 +178,7 @@ class HotelBookingRepositoryImplTest {
             reservationDao = database.hotelReservationDao(),
             tripImageDao = database.tripImageDao(),
             authRepository = authRepository,
+            userProfileRepository = RoomUserProfileRepository(database.userProfileDao()),
             clock = clock
         )
     }

@@ -107,7 +107,7 @@ Al cancelar una reserva:
 Validación actual:
 
 - [x] `./gradlew.bat :app:assembleDebug --console=plain`
-- [x] `./gradlew.bat :app:testDebugUnitTest --console=plain` (`53 tests`, `0 failures`, `0 errors`)
+- [x] `./gradlew.bat :app:testDebugUnitTest --console=plain` (`54 tests`, `0 failures`, `0 errors`)
 - [x] `./gradlew.bat :app:lintDebug --console=plain`
 
 Tests relevantes de Sprint04:
@@ -132,3 +132,14 @@ Validación manual de API:
 - [x] La estructura del proyecto incluye `ui/screens`, `ui/viewmodel`, `data/repository`, `di` y `data`.
 - [x] Las fechas de búsqueda/reserva se seleccionan con date pickers.
 - [x] El nombre del proyecto Android se mantiene como `BBTraveling`.
+
+---
+
+## 9. Evidencia de video
+
+La evidencia del Sprint 04 queda documentada en `doc/evidence/v4.0.0/README.md`.
+
+Video:
+- https://youtube.com/shorts/R1BUbUY_SOU
+
+Nota: YouTube convierte automaticamente en Short cualquier video vertical que dure menos de 3 minutos.

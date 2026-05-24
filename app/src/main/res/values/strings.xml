@@ -226,11 +226,14 @@
     <string name="hotel_guest_value">Guest: %1$s</string>
     <string name="hotel_booking_created">Reservation created and saved as a trip.</string>
     <string name="hotel_booking_cancelled">Reservation cancelled.</string>
+    <string name="hotel_error_dates_required">Select start and end dates.</string>
     <string name="hotel_error_invalid_dates">Start date must be before end date.</string>
     <string name="hotel_error_search_failed">Could not load available hotels.</string>
     <string name="hotel_error_booking_failed">Could not create the reservation.</string>
     <string name="hotel_error_cancel_failed">Could not cancel the reservation.</string>
     <string name="hotel_error_auth_required">Log in before booking a room.</string>
+    <string name="trip_hotel_reservation_badge">Hotel reservation</string>
+    <string name="trip_hotel_reservation_hint">This trip is linked to a hotel reservation. To change dates, cancel it and create a new reservation.</string>
     <string name="hotel_gallery_added">Image added to the trip gallery.</string>
     <string name="hotel_gallery_deleted">Image removed from the trip gallery.</string>
     <string name="hotel_gallery_error">Could not update the trip gallery.</string>

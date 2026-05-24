@@ -226,11 +226,14 @@
     <string name="hotel_guest_value">Hoste: %1$s</string>
     <string name="hotel_booking_created">Reserva creada i desada com a viatge.</string>
     <string name="hotel_booking_cancelled">Reserva cancel·lada.</string>
+    <string name="hotel_error_dates_required">Selecciona la data d\'inici i la data final.</string>
     <string name="hotel_error_invalid_dates">La data d\'inici ha de ser anterior a la data final.</string>
     <string name="hotel_error_search_failed">No s\'han pogut carregar els hotels disponibles.</string>
     <string name="hotel_error_booking_failed">No s\'ha pogut crear la reserva.</string>
     <string name="hotel_error_cancel_failed">No s\'ha pogut cancel·lar la reserva.</string>
     <string name="hotel_error_auth_required">Inicia sessió abans de reservar una habitació.</string>
+    <string name="trip_hotel_reservation_badge">Reserva d\'hotel</string>
+    <string name="trip_hotel_reservation_hint">Aquest viatge està vinculat a una reserva d\'hotel. Per canviar dates, cancel·la-la i crea una reserva nova.</string>
     <string name="hotel_gallery_added">Imatge afegida a la galeria del viatge.</string>
     <string name="hotel_gallery_deleted">Imatge eliminada de la galeria del viatge.</string>
     <string name="hotel_gallery_error">No s\'ha pogut actualitzar la galeria del viatge.</string>
